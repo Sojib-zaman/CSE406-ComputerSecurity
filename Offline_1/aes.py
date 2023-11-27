@@ -15,6 +15,11 @@ def initial_Print(message):
 def show_hex(w):
     print(w.get_bitvector_in_hex()," ", end="")
 
+def show_ascii(w):
+    print(w.get_bitvector_in_ascii()," ", end="")
+
+
+
 def show_matrix(m):
     for i in range(4):
         for j in range(4):
@@ -68,6 +73,18 @@ def shiftRow(StateMatrix):
         new_matrix.append(row_i) 
     return new_matrix 
 
+def InvShiftRow(StateMatrix):
+    new_matrix=[]
+    for i in range(4):
+        row_i = []
+        row_bitvector=BitVector(size=0)
+        for j in range(4):
+            row_bitvector+=StateMatrix[i][j]
+        row_bitvector=row_bitvector>>(8*i)
+        for k in range(4):
+            row_i.append(row_bitvector[8*k:8*(k+1)])
+        new_matrix.append(row_i) 
+    return new_matrix 
 
 
 def create_roundkey(key,round_constant):
@@ -93,7 +110,17 @@ def substituteMatrixBytes(StateMatrix):
         new_matrix.append(row_i) 
     return new_matrix 
 
+def InverseSubstituteMatrixBytes(StateMatrix):
+    new_matrix=[]
+    for i in range(4):
+        row_i = [ ]
+        for j in range(4):
+            row_i.append(BitVector(intVal = bitvector_demo.InvSbox[StateMatrix[i][j].intValue()], size=8))
+        new_matrix.append(row_i) 
+    return new_matrix 
+    
 AES_modulus = BitVector(bitstring='100011011')
+# Matrix Multiplication is basically mix columns and inverse (based on the first matrix )
 def MatrixMultiplication(M1,M2):
     new_matrix=[]
     for i in range(4):
@@ -143,6 +170,14 @@ def encryption(stateMatrix , plainMatrix , iterCount):
     print()
     return newStateMatrix
 
+def decryption(stateMatrix , plainMatrix , iterCount):
+    newStateMatrix=InvShiftRow(stateMatrix) 
+    newStateMatrix=InverseSubstituteMatrixBytes(newStateMatrix)
+    newStateMatrix=addRoundKey(newStateMatrix , plainMatrix)
+    if iterCount!=0:
+        newStateMatrix=MatrixMultiplication(bitvector_demo.InvMixer,newStateMatrix)
+    return newStateMatrix
+
 
 
 
@@ -155,6 +190,8 @@ plainMatrix = createMatrix(BitVector(textstring=plaintext))
 show_matrix(plainMatrix)
 print()
 
+
+#encryption process starts 
 print("After add round key")
 stateMatrix = addRoundKey(stateMatrix , plainMatrix)
 show_matrix(stateMatrix)
@@ -166,7 +203,18 @@ for iteration in range (0,10,1):
 CipherText = createBitVector(stateMatrix) 
 show_hex(CipherText)
 print()
+#encryption done
 
+#decryption starts
+
+stateMatrix = addRoundKey(stateMatrix,createMatrix(roundkeys[10]))
+for iteration in range(9, -1, -1):
+    print("Round : ",10-iteration) 
+    stateMatrix=decryption(stateMatrix,createMatrix(roundkeys[iteration]),iteration)
+result_Plaintext = createBitVector(stateMatrix) 
+show_ascii(result_Plaintext)
+print()
+#decryption done
 
 
 
