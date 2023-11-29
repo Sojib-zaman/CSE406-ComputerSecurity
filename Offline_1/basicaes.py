@@ -1,7 +1,9 @@
 from BitVector import * 
 import bitvector_demo
 import helper
-import math
+
+initial_key = "Thats my Kung Fu"
+plaintext="Two One Nine Two"
 
 def initial_Print(message):
     print("In ASCII: ",message)
@@ -132,15 +134,40 @@ def MatrixMultiplication(M1,M2):
     return new_matrix
 
 
+print("Key:")
+initial_Print(initial_key)
 
 
+
+print("Plain Text:")
+initial_Print(plaintext)
+
+
+roundkeys=[]
+roundkeys.append(BitVector(textstring=initial_key))
+print(roundkeys[0])
+
+print("roundkeys : ")
+for i in range(0,10,1): 
+    roundkeys.append(create_roundkey(roundkeys[i],helper.round_constant_tuple[i]))
+for i in range(0,11,1): 
+    show_hex(roundkeys[i])
 
 def encryption(stateMatrix , plainMatrix , iterCount):
+    print("After Substitution bytes")
     newStateMatrix = substituteMatrixBytes(stateMatrix) 
+    show_matrix(newStateMatrix)
+    print("After shift rows")
     newStateMatrix = shiftRow(newStateMatrix)
+    show_matrix(newStateMatrix)
     if iterCount!=9 : 
+        print("After Mix Columns")
         newStateMatrix=MatrixMultiplication(bitvector_demo.Mixer,newStateMatrix)
+        show_matrix(newStateMatrix)
+    print("After add round key")
     newStateMatrix = addRoundKey(newStateMatrix , plainMatrix)
+    show_matrix(newStateMatrix)
+    print()
     return newStateMatrix
 
 def decryption(stateMatrix , plainMatrix , iterCount):
@@ -156,83 +183,35 @@ def decryption(stateMatrix , plainMatrix , iterCount):
 
 
 
-# initial_key="Thats my Kung Fu"
-# given_plaintext="Two One Nine Two"
-
-# initial_key = "BUET CSE19 Batch"
-# given_plaintext="Never Gonna Give"
-
-initial_key = "BUET CSE19 Batch"
-given_plaintext="Never Gonna Give you up"
+print()
+stateMatrix = createMatrix(roundkeys[0])
+show_matrix(stateMatrix)
+plainMatrix = createMatrix(BitVector(textstring=plaintext))
+show_matrix(plainMatrix)
+print()
 
 
-chunk_count = math.ceil(len(given_plaintext) / 16)
-space_needed= 16*chunk_count- len(given_plaintext) 
-for i in range(0,space_needed,1):
-    given_plaintext+=" "
+#encryption process starts 
+print("After add round key")
+stateMatrix = addRoundKey(stateMatrix , plainMatrix)
+show_matrix(stateMatrix)
 
 
+for iteration in range (0,10,1):
+    print("Round : ",iteration+1) 
+    stateMatrix=encryption(stateMatrix,createMatrix(roundkeys[iteration+1]),iteration)
+CipherText = createBitVector(stateMatrix) 
+show_hex(CipherText)
+print()
+#encryption done
 
-print("Key:")
-initial_Print(initial_key)
+#decryption starts
 
-
-
-print("Plain Text:")
-initial_Print(given_plaintext)
-
-
-roundkeys=[]
-roundkeys.append(BitVector(textstring=initial_key))
-
-
-
-for i in range(0,10,1): 
-    roundkeys.append(create_roundkey(roundkeys[i],helper.round_constant_tuple[i]))
-
-
-
-
-
-final_ciphertext=BitVector(size=0)
-IV =  BitVector(bitstring='00000000')
-for chunk in range(0,chunk_count,1):
-    plaintext=given_plaintext[16*chunk:16*(chunk+1)]
-    plaintext = BitVector(textstring=plaintext)^IV 
-    stateMatrix = createMatrix(roundkeys[0])
-    plainMatrix = createMatrix(plaintext)
-    stateMatrix = addRoundKey(stateMatrix , plainMatrix)
-    for iteration in range (0,10,1):
-        stateMatrix=encryption(stateMatrix,createMatrix(roundkeys[iteration+1]),iteration)
-    CipherText = createBitVector(stateMatrix) 
-    show_hex(CipherText)
-    final_ciphertext+=CipherText 
-    IV=CipherText
-show_hex(final_ciphertext)
-show_ascii(final_ciphertext)
-
-print(len(final_ciphertext.get_bitvector_in_ascii()))
-
-# BOB received the final ciphertext 
-
-received_ciphertext = final_ciphertext.get_bitvector_in_ascii()
-IV =  BitVector(bitstring='00000000')
-for chunk in range(0,chunk_count,1):
-
-    received_cipher=received_ciphertext[16*chunk:16*(chunk+1)]
-    stateMatrix=createMatrix(BitVector(textstring=received_cipher))
-
-    stateMatrix = addRoundKey(stateMatrix,createMatrix(roundkeys[10]))
-    for iteration in range(9, -1, -1):
-        print("Round : ",10-iteration) 
-        stateMatrix=decryption(stateMatrix,createMatrix(roundkeys[iteration]),iteration)
-    result_Plaintext = createBitVector(stateMatrix) 
-    IV=result_Plaintext^IV
-    show_ascii(result_Plaintext)
-    print()
-
-
-
-
-
-
+stateMatrix = addRoundKey(stateMatrix,createMatrix(roundkeys[10]))
+for iteration in range(9, -1, -1):
+    print("Round : ",10-iteration) 
+    stateMatrix=decryption(stateMatrix,createMatrix(roundkeys[iteration]),iteration)
+result_Plaintext = createBitVector(stateMatrix) 
+show_ascii(result_Plaintext)
+print()
+#decryption done
