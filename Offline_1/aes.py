@@ -7,7 +7,8 @@ def initial_Print(message):
     print("In ASCII: ",message)
     print("In HEX:",end="")
     for c in message: 
-        print(c.encode('utf-8').hex()," ",end=" ")
+        #print(c.encode('utf-8').hex()," ",end=" ")
+        print("{0:02x}".format(ord(c),"x"),end=" ")
     print(" ")
 
 def show_hex(w):
@@ -162,6 +163,7 @@ def decryption(stateMatrix , plainMatrix , iterCount):
 # initial_key = "BUET CSE19 Batch"
 # given_plaintext="Never Gonna Give"
 
+
 initial_key = "BUET CSE19 Batch"
 given_plaintext="Never Gonna Give you up"
 
@@ -195,7 +197,7 @@ for i in range(0,10,1):
 
 
 final_ciphertext=BitVector(size=0)
-IV =  BitVector(bitstring='00000000')
+IV =  BitVector(textstring="\0")
 for chunk in range(0,chunk_count,1):
     plaintext=given_plaintext[16*chunk:16*(chunk+1)]
     plaintext = BitVector(textstring=plaintext)^IV 
@@ -205,18 +207,18 @@ for chunk in range(0,chunk_count,1):
     for iteration in range (0,10,1):
         stateMatrix=encryption(stateMatrix,createMatrix(roundkeys[iteration+1]),iteration)
     CipherText = createBitVector(stateMatrix) 
-    show_hex(CipherText)
     final_ciphertext+=CipherText 
     IV=CipherText
-show_hex(final_ciphertext)
-show_ascii(final_ciphertext)
 
-print(len(final_ciphertext.get_bitvector_in_ascii()))
+print("Cipher Text:")
+initial_Print(final_ciphertext.get_bitvector_in_ascii())
+
 
 # BOB received the final ciphertext 
 
 received_ciphertext = final_ciphertext.get_bitvector_in_ascii()
-IV =  BitVector(bitstring='00000000')
+IV =  BitVector(textstring="\0")
+final_plaintext=""
 for chunk in range(0,chunk_count,1):
 
     received_cipher=received_ciphertext[16*chunk:16*(chunk+1)]
@@ -224,13 +226,13 @@ for chunk in range(0,chunk_count,1):
 
     stateMatrix = addRoundKey(stateMatrix,createMatrix(roundkeys[10]))
     for iteration in range(9, -1, -1):
-        print("Round : ",10-iteration) 
         stateMatrix=decryption(stateMatrix,createMatrix(roundkeys[iteration]),iteration)
     result_Plaintext = createBitVector(stateMatrix) 
-    IV=result_Plaintext^IV
-    show_ascii(result_Plaintext)
-    print()
+    result_Plaintext=result_Plaintext^IV
+    IV=BitVector(textstring=received_cipher)
+    final_plaintext+=result_Plaintext.get_bitvector_in_ascii()
 
+print(final_plaintext)
 
 
 
