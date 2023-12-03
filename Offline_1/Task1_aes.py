@@ -12,25 +12,27 @@ import time
 # given_plaintext="Never Gonna Give"
 
 
-initial_key = "BUET CSE19 Batch"
-given_plaintext="Never Gonna Give you up"
+# initial_key = "BUET CSE19 Batch"
+# given_plaintext="Never Gonna Give you up"
+
+initial_key=input("Input a 128 bit key : ")
+initial_key = AES_helper.keychecker(initial_key)
+print("Key:")
+AES_helper.initial_Print(initial_key)
+print()
 
 
+
+given_plaintext=input("Input the plaintext to be sent : ")
 chunk_count = math.ceil(len(given_plaintext) / 16)
 space_needed= 16*chunk_count- len(given_plaintext) 
 for i in range(0,space_needed,1):
     given_plaintext+=" "
 
 
-
-print("Key:")
-AES_helper.initial_Print(initial_key)
-
-
-
 print("Plain Text:")
 AES_helper.initial_Print(given_plaintext)
-
+print()
 
 
 Key_ScheduingStart=time.time()
@@ -57,9 +59,10 @@ for chunk in range(0,chunk_count,1):
     final_ciphertext+=CipherText 
     IV=CipherText
 
-print("Cipher Text:")
-AES_helper.initial_Print(final_ciphertext.get_bitvector_in_ascii())
+print("Ciphered Text:")
+AES_helper.initial_Print(final_ciphertext.get_bitvector_in_ascii(),1)
 EncryptionFinish=time.time()
+print()
 
 # BOB received the final ciphertext 
 DecryptionStart=time.time()
@@ -79,7 +82,9 @@ for chunk in range(0,chunk_count,1):
     IV=BitVector(textstring=received_cipher)
     final_plaintext+=result_Plaintext.get_bitvector_in_ascii()
 
-print(final_plaintext)
+print("Deciphered Text:")
+AES_helper.initial_Print(final_plaintext,1)
+print()
 DecryptionFinish=time.time() 
 
 AES_helper.final_time_print(Key_ScheduingEnd-Key_ScheduingStart , EncryptionFinish-EncryptionStart , DecryptionFinish-DecryptionStart)

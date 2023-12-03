@@ -1,7 +1,16 @@
 from BitVector import * 
 import bitvector_demo
 import math
+    
+AES_modulus = BitVector(bitstring='100011011')
 
+
+# init_round_constant = BitVector(hexstring="01000000")
+# round_constant_tuple=[]
+# round_constant_tuple.append(init_round_constant)
+# for i in range(9):
+#     init_round_constant=init_round_constant.gf_multiply_modular(BitVector(hexstring="01000000"), AES_modulus, 8)
+#     round_constant_tuple.append(init_round_constant)
 
 
 
@@ -12,19 +21,36 @@ round_constant_tuple = (
     BitVector(hexstring="40000000"), BitVector(hexstring="80000000"),
     BitVector(hexstring="1b000000"), BitVector(hexstring="36000000")
     )
+
+def keychecker(key):
+    if len(key)==16:
+        return key 
+    space_needed=16-len(key)
+    if space_needed>0:
+        for i in range(0,space_needed,1):
+            key+=" "
+    else : 
+        key = key[:16] 
+    return key 
+
+
+
 def final_time_print(b,d,f): 
     print("Execution Time Details:")
     print("Key Schedule Time: ",b*1000," ms")
     print("Encryption Time: ",d*1000," ms")
     print("Decryption Time: ",f*1000," ms")
 
-def initial_Print(message):
-    print("In ASCII: ",message)
+def initial_Print(message,late=0):
+    if late==0:
+        print("In ASCII: ",message)
     print("In HEX:",end="")
     for c in message: 
         #print(c.encode('utf-8').hex()," ",end=" ")
         print("{0:02x}".format(ord(c),"x"),end=" ")
     print(" ")
+    if late==1:
+        print("In ASCII: ",message)
 
 def show_hex(w):
     print(w.get_bitvector_in_hex()," ", end="")
@@ -132,8 +158,7 @@ def InverseSubstituteMatrixBytes(StateMatrix):
             row_i.append(BitVector(intVal = bitvector_demo.InvSbox[StateMatrix[i][j].intValue()], size=8))
         new_matrix.append(row_i) 
     return new_matrix 
-    
-AES_modulus = BitVector(bitstring='100011011')
+
 # Matrix Multiplication is basically mix columns and inverse (based on the first matrix )
 def MatrixMultiplication(M1,M2):
     new_matrix=[]
