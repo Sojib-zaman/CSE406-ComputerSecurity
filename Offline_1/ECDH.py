@@ -11,11 +11,11 @@ a=2
 b=2
 
 #Alice choose his private key as 26 
-K_A = 5
+K_A = 9
 Alice_sent_key = ECDH_helper.scalarMultiplication(K_A, G , P,a) 
 
 #Bob choose his private key as 15  
-K_B = 10
+K_B = 2
 Bob_sent_key = ECDH_helper.scalarMultiplication(K_B, G , P,a) 
 
 

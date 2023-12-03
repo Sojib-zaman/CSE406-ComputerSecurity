@@ -1,7 +1,10 @@
 from BitVector import * 
 import bitvector_demo
 import math
- 
+
+
+
+
 round_constant_tuple = (
     BitVector(hexstring="01000000"), BitVector(hexstring="02000000"),
     BitVector(hexstring="04000000"), BitVector(hexstring="08000000"),
@@ -9,6 +12,11 @@ round_constant_tuple = (
     BitVector(hexstring="40000000"), BitVector(hexstring="80000000"),
     BitVector(hexstring="1b000000"), BitVector(hexstring="36000000")
     )
+def final_time_print(b,d,f): 
+    print("Execution Time Details:")
+    print("Key Schedule Time: ",b*1000," ms")
+    print("Encryption Time: ",d*1000," ms")
+    print("Decryption Time: ",f*1000," ms")
 
 def initial_Print(message):
     print("In ASCII: ",message)

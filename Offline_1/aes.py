@@ -2,7 +2,7 @@ from BitVector import *
 import bitvector_demo
 import math
 import AES_helper
-
+import time
 
 
 # initial_key="Thats my Kung Fu"
@@ -32,18 +32,17 @@ print("Plain Text:")
 AES_helper.initial_Print(given_plaintext)
 
 
+
+Key_ScheduingStart=time.time()
 roundkeys=[]
 roundkeys.append(BitVector(textstring=initial_key))
-
-
-
 for i in range(0,10,1): 
     roundkeys.append(AES_helper.create_roundkey(roundkeys[i],AES_helper.round_constant_tuple[i]))
+Key_ScheduingEnd=time.time()
 
 
 
-
-
+EncryptionStart=time.time()
 final_ciphertext=BitVector(size=0)
 IV =  BitVector(textstring="\0")
 for chunk in range(0,chunk_count,1):
@@ -60,10 +59,10 @@ for chunk in range(0,chunk_count,1):
 
 print("Cipher Text:")
 AES_helper.initial_Print(final_ciphertext.get_bitvector_in_ascii())
-
+EncryptionFinish=time.time()
 
 # BOB received the final ciphertext 
-
+DecryptionStart=time.time()
 received_ciphertext = final_ciphertext.get_bitvector_in_ascii()
 IV =  BitVector(textstring="\0")
 final_plaintext=""
@@ -81,7 +80,9 @@ for chunk in range(0,chunk_count,1):
     final_plaintext+=result_Plaintext.get_bitvector_in_ascii()
 
 print(final_plaintext)
+DecryptionFinish=time.time() 
 
+AES_helper.final_time_print(Key_ScheduingEnd-Key_ScheduingStart , EncryptionFinish-EncryptionStart , DecryptionFinish-DecryptionStart)
 
 
 
