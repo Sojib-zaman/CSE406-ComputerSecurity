@@ -31,11 +31,11 @@ def point_addition(C,D,P):
     return (x3,y3)
 
 def point_duplication(G,prime,a):
-    print(G,prime,a)
+    #print(G,prime,a)
     s=((3*G[0]*G[0])+a)*ModularInverse(2*G[1],prime) 
-    print(s)
+    #print(s)
     s=s%prime
-    print(s)
+    #print(s)
     x3=(s*s-G[0]-G[0])%prime
     y3=(s*(G[0]-x3)-G[1])%prime
     return (x3,y3)
@@ -45,21 +45,21 @@ def scalarMultiplication(a,P,p,g_a):
     init=P
     current_XP=1
     binary = format(a,'b')
-    print(binary)
+    #print(binary)
     ignore=1
-    print(P)
+    #print(P)
     for bit in binary:
-        print("bit ",bit)
+        #print("bit ",bit)
         if ignore:
             ignore=0
             continue
         P=point_duplication(P,p,g_a)
         current_XP*=2
-        print(current_XP,"P ",P)
+        #print(current_XP,"P ",P)
         if bit=="1" :
             P=point_addition(P,init,p)
             current_XP+=1
-            print(current_XP,"P ",P)
+            #print(current_XP,"P ",P)
     return P 
 
 
@@ -69,8 +69,7 @@ def scalarMultiplication(a,P,p,g_a):
 def ECC_param(keySize):
     condition = True 
     while condition:
-        a=Crypto.Util.number.getRandomNBitInteger(keySize)
-       
+        a=Crypto.Util.number.getRandomNBitInteger(keySize) 
         G=(Crypto.Util.number.getRandomNBitInteger(keySize),Crypto.Util.number.getRandomNBitInteger(keySize))
         p=Crypto.Util.number.getPrime(keySize) 
         a=a%p
