@@ -1,16 +1,22 @@
 from BitVector import * 
 import bitvector_demo
 import math
-    
+from copy import deepcopy
 AES_modulus = BitVector(bitstring='100011011')
 
 
-# init_round_constant = BitVector(hexstring="01000000")
-# round_constant_tuple=[]
-# round_constant_tuple.append(init_round_constant)
-# for i in range(9):
-#     init_round_constant=init_round_constant.gf_multiply_modular(BitVector(hexstring="01000000"), AES_modulus, 8)
-#     round_constant_tuple.append(init_round_constant)
+
+# def create_RC():
+#     round_constant_tuple=[0x01]
+#     bit_tuple=[BitVector(intVal=0x01, size=8)]
+#     for i in range(1,11,1):
+#         prev=round_constant_tuple[-1]
+#         new = (prev<<1) 
+#         if prev& 0x80:
+#             new^=0x1B
+#         round_constant_tuple.append(new)
+#         bit_tuple.append(BitVector(intVal=new, size=8))
+#     return bit_tuple
 
 
 

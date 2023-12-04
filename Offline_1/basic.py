@@ -1,3 +1,5 @@
-import AES_helper 
-for i in range(10):
-    print(AES_helper.round_constant_tuple[i])
+import ECDH_helper
+
+
+print(ECDH_helper.ModularInverse(4,19))
+print(ECDH_helper.point_duplication((5,2),19,2))
