@@ -78,7 +78,7 @@ def ECC_param(keySize):
 
         if (4*(a**3) + 27*(b**2))%p != 0:
             condition=False
-        return a,b,G,p 
+    return a,b,G,p 
 
 
 

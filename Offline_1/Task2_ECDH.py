@@ -47,7 +47,7 @@ datatable = PrettyTable()
 # datatable.field_names=[" ", "A" , "B" , "Shared key R"]
 datatable.field_names=["K" , "A" , "B" , "R"]
 for ks in range(0,3,1):
-    datatable.add_row([keysize[ks],Atimekeeper[ks],Btimekeeper[ks],Rtimekeeper[ks]])
+    datatable.add_row([keysize[ks],Atimekeeper[ks]/5,Btimekeeper[ks]/5,Rtimekeeper[ks]/5])
 
 
 print(datatable)

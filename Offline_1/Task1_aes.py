@@ -4,7 +4,7 @@ import math
 import AES_helper
 import time
 
-
+import Crypto.Util.number
 # initial_key="Thats my Kung Fu"
 # given_plaintext="Two One Nine Two"
 
@@ -24,10 +24,7 @@ print()
 
 
 given_plaintext=input("Input the plaintext to be sent : ")
-chunk_count = math.ceil(len(given_plaintext) / 16)
-space_needed= 16*chunk_count- len(given_plaintext) 
-for i in range(0,space_needed,1):
-    given_plaintext+=" "
+given_plaintext=AES_helper.plaintextchecker(given_plaintext)
 
 
 print("Plain Text:")
@@ -46,7 +43,11 @@ Key_ScheduingEnd=time.time()
 
 EncryptionStart=time.time()
 final_ciphertext=BitVector(size=0)
-IV =  BitVector(textstring="\0")
+A=Crypto.Util.number.getRandomNBitInteger(128) 
+IV = BitVector(intVal=A, size=128)
+chunk_count = math.ceil(len(given_plaintext) / 16)
+
+
 for chunk in range(0,chunk_count,1):
     plaintext=given_plaintext[16*chunk:16*(chunk+1)]
     plaintext = BitVector(textstring=plaintext)^IV 
@@ -67,7 +68,7 @@ print()
 # BOB received the final ciphertext 
 DecryptionStart=time.time()
 received_ciphertext = final_ciphertext.get_bitvector_in_ascii()
-IV =  BitVector(textstring="\0")
+IV = BitVector(intVal=A, size=128)
 final_plaintext=""
 for chunk in range(0,chunk_count,1):
 

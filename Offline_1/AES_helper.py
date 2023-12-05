@@ -28,6 +28,21 @@ round_constant_tuple = (
     BitVector(hexstring="1b000000"), BitVector(hexstring="36000000")
     )
 
+def bitkeychecker(shared_secret_key):
+    size_of_x_in_bits = int(math.log2(shared_secret_key)) + 1
+    binx = bin(shared_secret_key)[2:]
+    if size_of_x_in_bits==128:
+        return binx
+     
+    z_needed = 128-size_of_x_in_bits 
+    if z_needed>0:
+        for i in range(0,z_needed,1):
+            binx+='0'
+        else : 
+            binx = binx[:128] 
+    return binx 
+
+
 def keychecker(key):
     if len(key)==16:
         return key 
@@ -39,6 +54,12 @@ def keychecker(key):
         key = key[:16] 
     return key 
 
+def plaintextchecker(given_plaintext): 
+    chunk_count = math.ceil(len(given_plaintext) / 16)
+    space_needed= 16*chunk_count- len(given_plaintext) 
+    for i in range(0,space_needed,1):
+        given_plaintext+=" "
+    return given_plaintext
 
 
 def final_time_print(b,d,f): 
