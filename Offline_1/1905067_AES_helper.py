@@ -1,5 +1,6 @@
 from BitVector import * 
-import bitvector_demo
+import importlib
+bitvector_demo=importlib.import_module("1905067_bitvector_demo")
 import math
 from copy import deepcopy
 AES_modulus = BitVector(bitstring='100011011')

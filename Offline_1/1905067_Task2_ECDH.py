@@ -1,6 +1,9 @@
 
 # y2 = x3 + ax + b , where a and b are public parameters 
-import ECDH_helper
+import importlib
+bitvector_demo=importlib.import_module("1905067_bitvector_demo")
+AES_helper=importlib.import_module("1905067_AES_helper")
+ECDH_helper=importlib.import_module("1905067_ECDH_helper")
 import Crypto.Util.number
 import time 
 from prettytable import PrettyTable  

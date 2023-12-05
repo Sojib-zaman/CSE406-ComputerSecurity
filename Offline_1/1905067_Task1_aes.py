@@ -1,9 +1,9 @@
 from BitVector import * 
-import bitvector_demo
-import math
-import AES_helper
+import importlib
+bitvector_demo=importlib.import_module("1905067_bitvector_demo")
+AES_helper=importlib.import_module("1905067_AES_helper")
 import time
-
+import math
 import Crypto.Util.number
 # initial_key="Thats my Kung Fu"
 # given_plaintext="Two One Nine Two"
