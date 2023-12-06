@@ -1,25 +1,18 @@
 import socket 
-import ECDH_helper
 import json 
 import Crypto.Util.number
 import math
-import AES_helper
+import importlib
+bitvector_demo=importlib.import_module("1905067_bitvector_demo")
+AES_helper=importlib.import_module("1905067_AES_helper")
+ECDH_helper=importlib.import_module("1905067_ECDH_helper")
 from BitVector import *
 
-IV =  BitVector(textstring="\0")
-print(IV)
-print(IV.length())
-given_plaintext="abraras eset t set s c"
-print(given_plaintext)
-A=Crypto.Util.number.getRandomNBitInteger(128) 
-IV = BitVector(intVal=A, size=128)
-chunk_count = math.ceil(len(given_plaintext) / 16)
+file_path = '/home/sojib/Academics/4-1/Lab/Security/Security_Code/Offline_1/x.png'
 
+with open(file_path, 'rb') as file:
+    binary_data = file.read()
+byte_array_data = bytearray(binary_data)
 
-for chunk in range(0,chunk_count,1):
-    plaintext=given_plaintext[16*chunk:16*(chunk+1)]
-    print(plaintext)
-    print(BitVector(textstring=plaintext))
-    print(IV)
-    plaintext = BitVector(textstring=plaintext)^IV 
-    print(plaintext)
+print(byte_array_data)
+

@@ -7,27 +7,32 @@ AES_modulus = BitVector(bitstring='100011011')
 
 
 
-# def create_RC():
-#     round_constant_tuple=[0x01]
-#     bit_tuple=[BitVector(intVal=0x01, size=8)]
-#     for i in range(1,11,1):
-#         prev=round_constant_tuple[-1]
-#         new = (prev<<1) 
-#         if prev& 0x80:
-#             new^=0x1B
-#         round_constant_tuple.append(new)
-#         bit_tuple.append(BitVector(intVal=new, size=8))
-#     return bit_tuple
+def create_RC():
+    round_constant_tuple = [0x01]
+    
+    for i in range(1, 10, 1):
+        prev = round_constant_tuple[-1]
+        new = (prev << 1)
+        if prev & 0x80:
+            new ^= 0x11B
+        round_constant_tuple.append(new)
+    concatenated_bitvector = []
+    for value in round_constant_tuple:
+        concatenated_bitvector.append(BitVector(intVal=value, size=8) + BitVector(size=24))
+    
+    return concatenated_bitvector
 
 
+round_constant_tuple = create_RC()
 
-round_constant_tuple = (
-    BitVector(hexstring="01000000"), BitVector(hexstring="02000000"),
-    BitVector(hexstring="04000000"), BitVector(hexstring="08000000"),
-    BitVector(hexstring="10000000"), BitVector(hexstring="20000000"),
-    BitVector(hexstring="40000000"), BitVector(hexstring="80000000"),
-    BitVector(hexstring="1b000000"), BitVector(hexstring="36000000")
-    )
+
+# round_constant_tuple = (
+#     BitVector(hexstring="01000000"), BitVector(hexstring="02000000"),
+#     BitVector(hexstring="04000000"), BitVector(hexstring="08000000"),
+#     BitVector(hexstring="10000000"), BitVector(hexstring="20000000"),
+#     BitVector(hexstring="40000000"), BitVector(hexstring="80000000"),
+#     BitVector(hexstring="1b000000"), BitVector(hexstring="36000000")
+#     )
 
 def bitkeychecker(shared_secret_key):
     size_of_x_in_bits = int(math.log2(shared_secret_key)) + 1
