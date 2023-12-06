@@ -8,7 +8,7 @@ AES_helper=importlib.import_module("1905067_AES_helper")
 ECDH_helper=importlib.import_module("1905067_ECDH_helper")
 from BitVector import *
 import sys
-
+Helper = importlib.import_module("1905067_Helper")
 
 
 PORT=8000 
@@ -57,7 +57,8 @@ def AliceConnection():
 
 
         shared_secret_key=final_key_for_alice[0]
-        print("Shared Secret Key : " , shared_secret_key)
+        print(Helper.TextStyle.BOLD,Helper.TextColor.MAGENTA)
+        print("Shared Secret Key : " , shared_secret_key,Helper.TextStyle.RESET)
 
         given_plaintext=input("Input the plaintext to be sent : ")
         given_plaintext=AES_helper.plaintextchecker(given_plaintext)

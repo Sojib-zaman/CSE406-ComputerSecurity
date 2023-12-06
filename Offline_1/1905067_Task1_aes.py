@@ -2,6 +2,7 @@ from BitVector import *
 import importlib
 bitvector_demo=importlib.import_module("1905067_bitvector_demo")
 AES_helper=importlib.import_module("1905067_AES_helper")
+Helper = importlib.import_module("1905067_Helper")
 import time
 import math
 import Crypto.Util.number

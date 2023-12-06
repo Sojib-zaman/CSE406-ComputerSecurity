@@ -7,7 +7,7 @@ AES_helper=importlib.import_module("1905067_AES_helper")
 ECDH_helper=importlib.import_module("1905067_ECDH_helper")
 from BitVector import *
 import math 
-
+Helper = importlib.import_module("1905067_Helper")
 PORT=8000 
 K_B = Crypto.Util.number.getRandomNBitInteger(128) 
 # print("kb ",K_B)
@@ -26,7 +26,8 @@ def BobConnection():
         received_data = json.loads(AliceKeys.decode('utf-8'))
         a,b,G,Alice_sent_key,P=received_data
         print("Received from Alice : ")
-        print("a : ",a,"\nb: ",b, "\npoint G : ", G , "\nK_a*g(mod P) : ",Alice_sent_key , "\nPrime P : ",P)
+        print(Helper.TextStyle.BOLD,Helper.TextColor.CYAN)
+        print("a : ",a,"\nb: ",b, "\npoint G : ", G , "\nK_a*g(mod P) : ",Alice_sent_key , "\nPrime P : ",P,Helper.TextStyle.RESET)
         
         
         
@@ -47,7 +48,8 @@ def BobConnection():
 
 
         shared_secret_key=final_key_for_bob[0]
-        print("Shared Secret Key : " , shared_secret_key)
+        print(Helper.TextStyle.BOLD,Helper.TextColor.MAGENTA)
+        print("Shared Secret Key : " , shared_secret_key,Helper.TextStyle.RESET)
 
         
         received_ciphertext=AliceSocket.recv(1024).decode('utf-8')
@@ -60,7 +62,8 @@ def BobConnection():
         IV=BitVector(textstring=IV)
         # 
         received_ciphertext=received_ciphertext[16:]
-        print("received ciphertext : ",received_ciphertext)
+        print(Helper.TextStyle.BOLD,Helper.TextColor.YELLOW)
+        print("received ciphertext : ",received_ciphertext,Helper.TextStyle.RESET)
      
         bin_shared = AES_helper.bitkeychecker(shared_secret_key)
         roundkeys=[]

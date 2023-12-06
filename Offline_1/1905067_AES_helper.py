@@ -4,7 +4,7 @@ bitvector_demo=importlib.import_module("1905067_bitvector_demo")
 import math
 from copy import deepcopy
 AES_modulus = BitVector(bitstring='100011011')
-
+Helper = importlib.import_module("1905067_Helper")
 
 
 def create_RC():
@@ -69,21 +69,22 @@ def plaintextchecker(given_plaintext):
 
 
 def final_time_print(b,d,f): 
-    print("Execution Time Details:")
+    print(Helper.TextStyle.BOLD,Helper.TextColor.YELLOW,"Execution Time Details:",Helper.TextStyle.RESET)
+    print(Helper.TextStyle.BOLD,Helper.TextColor.GREEN)
     print("Key Schedule Time: ",b*1000," ms")
     print("Encryption Time: ",d*1000," ms")
-    print("Decryption Time: ",f*1000," ms")
+    print("Decryption Time: ",f*1000," ms",Helper.TextStyle.RESET)
 
 def initial_Print(message,late=0):
     if late==0:
-        print("In ASCII: ",message)
-    print("In HEX:",end="")
+        print(Helper.TextStyle.BOLD,Helper.TextColor.RED,"In ASCII: ",message,Helper.TextStyle.RESET)
+    print(Helper.TextStyle.BOLD,Helper.TextColor.BLUE,"In HEX:",end="")
     for c in message: 
         #print(c.encode('utf-8').hex()," ",end=" ")
         print("{0:02x}".format(ord(c),"x"),end=" ")
-    print(" ")
+    print(Helper.TextStyle.RESET)
     if late==1:
-        print("In ASCII: ",message)
+        print(Helper.TextStyle.BOLD,Helper.TextColor.RED,"In ASCII: ",message,Helper.TextStyle.RESET)
 
 def show_hex(w):
     print(w.get_bitvector_in_hex()," ", end="")
