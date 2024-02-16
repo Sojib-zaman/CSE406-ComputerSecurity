@@ -91,7 +91,8 @@ def BobConnection():
         AES_helper.initial_Print(final_plaintext,1)
         print()  
         break
-
+    AliceSocket.close()
+    BobSocket.close()
 
         
         

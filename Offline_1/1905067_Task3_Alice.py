@@ -102,7 +102,9 @@ def AliceConnection():
  
         
         AliceSocket.sendall(final_message_from_alice.encode('utf-8'))
-        break 
+        break
+    AliceSocket.close()
+
         
 if __name__=="__main__":
     AliceConnection()
