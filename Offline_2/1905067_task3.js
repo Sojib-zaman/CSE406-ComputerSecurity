@@ -26,8 +26,8 @@
 			Ajax.open("POST", sendurl, true);
 			Ajax.setRequestHeader("Host", "www.seed-server.com");
 			Ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			//Ajax.send(content);
-			Ajax.send(formData);
+			Ajax.send(content);
+			//Ajax.send(formData);
 		}
 	}
 
